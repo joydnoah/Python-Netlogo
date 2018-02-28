@@ -7,7 +7,6 @@ from NetlogoUtils import Graph_utils
 
 def run_experiment (parameters):
     workspace = pyNetLogo.NetLogoLink(gui=False)
-    # url1 = r'Netlogo-files/Wolf Sheep Predation_v6.nlogo'
 
     workspace.load_model(parameters['document_uri'])
 
