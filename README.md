@@ -5,6 +5,5 @@ pip install -r requirements
 ```
 To run a experiment run:
 ```
-env/Scripts/activate
-python Scripts\netlogo_manage.py
+python Scripts\netlogo_manage.py --run_experiment
 ```

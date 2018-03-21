@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def plot_something(stop_time, free_time, load_time, time):
+def plot_shuttles(stop_time, free_time, load_time, time):
     stop_time_shuttle = []
     free_time_shuttle = []
     load_time_shuttle = []
@@ -40,6 +40,18 @@ def plot_something(stop_time, free_time, load_time, time):
     ax[2].set_ylabel('ycor')
     # ax[2].set_aspect('equal')
     ax[2].grid(True)
+
+    fig.set_size_inches(14, 5)
+
+    plt.legend()
+    plt.show()
+
+def simple_plot(autonomy_value, time, label):
+    fig, ax = plt.subplots(1)
+    ax.plot(time, autonomy_value, 'r', label = label)
+    ax.set_xlabel('xcor')
+    ax.set_ylabel('ycor')
+    ax.grid(True)
 
     fig.set_size_inches(14, 5)
 
