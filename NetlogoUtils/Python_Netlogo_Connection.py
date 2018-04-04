@@ -4,6 +4,7 @@ sns.set_context('talk')
 
 import pyNetLogo
 from NetlogoUtils import Graph_utils
+from test_gantt import draw_gantt
 
 def run_experiment (parameters):
     workspace = pyNetLogo.NetLogoLink(gui=False)
@@ -54,3 +55,4 @@ def setup_netlogo_env (parameters, workspace):
     workspace.command("set shuttles_selection \"" + parameters['shuttles_selection'] + "\"")
     workspace.command("set pot_field_input \"" + parameters['pot_field_input'] + "\"")
     workspace.command("set bio_input \"" + parameters['bio_input'] + "\"")
+    workspace.command("set GanttM " + parameters['GanttM'])

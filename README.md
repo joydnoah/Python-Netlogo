@@ -7,3 +7,8 @@ To run a experiment run:
 ```
 python Scripts\netlogo_manage.py --run_experiment
 ```
+To run jupyter
+```
+py -m notebook
+```
+

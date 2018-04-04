@@ -8,7 +8,6 @@ def process(run_experiment):
     if run_experiment is not None:
         config = configparser.ConfigParser()
         config.read('Experiments\\' + 'Experiment1.ini')
-        print(run_experiment)
     Python_Netlogo_Connection.run_experiment(config['EXPERIMENT'])
 
 
