@@ -1,19 +1,22 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
+def transform_shuttle_list(shuttle_list, time, index):
+    return list(map(lambda x: x[index] * 100 / time[-1], shuttle_list))
+
 def plot_shuttles(stop_time, free_time, load_time, time):
     stop_time_shuttle = []
     free_time_shuttle = []
     load_time_shuttle = []
-    stop_time_shuttle.append(list(map(lambda x: x[0] * 100 / time[-1], stop_time)))
-    free_time_shuttle.append(list(map(lambda x: x[0] * 100 / time[-1], free_time)))
-    load_time_shuttle.append(list(map(lambda x: x[0] * 100 / time[-1], load_time)))
-    stop_time_shuttle.append(list(map(lambda x: x[1] * 100 / time[-1], stop_time)))
-    free_time_shuttle.append(list(map(lambda x: x[1] * 100 / time[-1], free_time)))
-    load_time_shuttle.append(list(map(lambda x: x[1] * 100 / time[-1], load_time)))
-    stop_time_shuttle.append(list(map(lambda x: x[2] * 100 / time[-1], stop_time)))
-    free_time_shuttle.append(list(map(lambda x: x[2] * 100 / time[-1], free_time)))
-    load_time_shuttle.append(list(map(lambda x: x[2] * 100 / time[-1], load_time)))
+    stop_time_shuttle.append(transform_shuttle_list(stop_time, time, 0))
+    free_time_shuttle.append(transform_shuttle_list(free_time, time, 0))
+    load_time_shuttle.append(transform_shuttle_list(load_time, time, 0))
+    stop_time_shuttle.append(transform_shuttle_list(stop_time, time, 1))
+    free_time_shuttle.append(transform_shuttle_list(free_time, time, 1))
+    load_time_shuttle.append(transform_shuttle_list(load_time, time, 1))
+    stop_time_shuttle.append(transform_shuttle_list(stop_time, time, 2))
+    free_time_shuttle.append(transform_shuttle_list(free_time, time, 2))
+    load_time_shuttle.append(transform_shuttle_list(load_time, time, 2))
 
     fig, ax = plt.subplots(1, 3)
 
@@ -46,9 +49,33 @@ def plot_shuttles(stop_time, free_time, load_time, time):
     plt.legend()
     plt.show()
 
-def simple_plot(autonomy_value, time, label):
+def plot_shuttles2(stop_time, free_time, load_time, time):
+    stop_time_shuttle = list(map(lambda x: x * 100 / time[-1], stop_time))
+    free_time_shuttle = list(map(lambda x: x * 100 / time[-1], free_time))
+    load_time_shuttle = list(map(lambda x: x * 100 / time[-1], load_time))
+
+    fig, ax = plt.subplots(1)
+
+    ax.plot(time, stop_time_shuttle, 'r', label='stop')
+    ax.plot(time, free_time_shuttle, 'b', label='free')
+    ax.plot(time, load_time_shuttle, 'g', label='load')
+    ax.set_xlabel('xcor')
+    ax.set_ylabel('ycor')
+    # ax[0].set_aspect('equal')
+    ax.grid(True)
+
+    fig.set_size_inches(14, 5)
+
+    plt.legend()
+    plt.show()
+
+def simple_plot(autonomy_value, time, label, start=None, end=None):
     fig, ax = plt.subplots(1)
     ax.plot(time, autonomy_value, 'r', label = label)
+    if start is not None:
+        ax.axvline(start, color='b')
+    if end is not None:
+        ax.axvline(end, color='b')
     ax.set_xlabel('xcor')
     ax.set_ylabel('ycor')
     ax.grid(True)

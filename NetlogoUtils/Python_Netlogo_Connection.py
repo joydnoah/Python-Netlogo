@@ -3,6 +3,7 @@ sns.set_style('white')
 sns.set_context('talk')
 
 import pyNetLogo
+from NetlogoUtils.Controller import OnOfController
 from NetlogoUtils import Graph_utils
 from test_gantt import draw_gantt
 
@@ -27,6 +28,7 @@ def run_experiment (parameters):
         workspace.command("repeat 100 [ go ]")
 
         time = workspace.report("time")
+        workspace.command("set dispatch_method \"" + OnOfController(time, "bio") + "\"")
         time_list.append(time)
         MSD.append(workspace.report('MSD'))
         finished = workspace.report("finished")
@@ -38,10 +40,20 @@ def run_experiment (parameters):
         print('Time' + str(time))
         print('running...')
 
-    Graph_utils.plot_shuttles(stop_time, free_time, load_time, time_list)
-    Graph_utils.simple_plot(autonomy_value, time_list, 'Autonomy')
-    Graph_utils.simple_plot(autonomy_per_time_value, time_list, 'Autonomy per time')
+    debut_scenario = workspace.report("debut_scenario")
+    fin_scenario = workspace.report("fin_scenario")
+    shuttles = workspace.report("count shuttles")
+    # Graph_utils.plot_shuttles(stop_time, free_time, load_time, time_list)
+    for index in range(0, int(shuttles)):
+        Graph_utils.plot_shuttles2(
+            Graph_utils.transform_shuttle_list(stop_time, time_list, index),
+            Graph_utils.transform_shuttle_list(free_time, time_list, index),
+            Graph_utils.transform_shuttle_list(load_time, time_list, index), time_list)
+    Graph_utils.simple_plot(autonomy_value, time_list, 'Autonomy', debut_scenario, fin_scenario)
+    Graph_utils.simple_plot(autonomy_per_time_value, time_list, 'Autonomy per time', debut_scenario, fin_scenario)
     Graph_utils.simple_plot(autonomy_per_time_value, autonomy_value, 'Autonomy per time vs Autonomy')
+    print(MSD[-1])
+
 
 
 def setup_netlogo_env (parameters, workspace):
