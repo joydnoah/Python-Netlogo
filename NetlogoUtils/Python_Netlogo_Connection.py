@@ -25,18 +25,18 @@ def run_experiment (parameters):
     autonomy_value = []
     autonomy_per_time_value = []
     while finished == 0:
-        workspace.command("repeat 100 [ go ]")
+        workspace.command("repeat 10 [ go ]")
 
         time = workspace.report("time")
-        workspace.command("set dispatch_method \"" + OnOfController(time, "bio") + "\"")
+        autonomy_value.append(workspace.report("autonomy_value"))
+        autonomy_per_time_value.append(autonomy_value[-1]/time)
+        workspace.command("set dispatch_method \"" + OnOfController(autonomy_per_time_value[-1], "bio", parameters['setpoint'], parameters['range']) + "\"")
         time_list.append(time)
         MSD.append(workspace.report('MSD'))
         finished = workspace.report("finished")
         load_time.append(workspace.report("map [x -> [load_time] of x] ( sort shuttles )"))
         free_time.append(workspace.report("map [x -> [free_time] of x] ( sort shuttles )"))
         stop_time.append(workspace.report("map [x -> [stop_time] of x] ( sort shuttles )"))
-        autonomy_value.append(workspace.report("autonomy_value"))
-        autonomy_per_time_value.append(workspace.report("autonomy_value / time"))
         print('Time' + str(time))
         print('running...')
 
