@@ -69,13 +69,15 @@ def plot_shuttles2(stop_time, free_time, load_time, time):
     plt.legend()
     plt.show()
 
-def simple_plot(autonomy_value, time, label, start=None, end=None):
+def simple_plot(autonomy_value, time, label, start=None, end=None, last_product=None):
     fig, ax = plt.subplots(1)
     ax.plot(time, autonomy_value, 'r', label = label)
     if start is not None:
         ax.axvline(start, color='b')
     if end is not None:
         ax.axvline(end, color='b')
+    if last_product is not None:
+        ax.axvline(last_product, color='g')
     ax.set_xlabel('xcor')
     ax.set_ylabel('ycor')
     ax.grid(True)

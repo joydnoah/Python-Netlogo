@@ -3,7 +3,8 @@ sns.set_style('white')
 sns.set_context('talk')
 
 import pyNetLogo
-from NetlogoUtils.Controller import OnOfController
+from NetlogoUtils.Controller import OnOffController
+from NetlogoUtils.Controller import FuzzyController
 from NetlogoUtils import Graph_utils
 from test_gantt import draw_gantt
 
@@ -30,9 +31,22 @@ def run_experiment (parameters):
         time = workspace.report("time")
         autonomy_value.append(workspace.report("autonomy_value"))
         autonomy_per_time_value.append(autonomy_value[-1]/time)
-        workspace.command("set dispatch_method \"" + OnOfController(autonomy_per_time_value[-1], "bio", parameters['setpoint'], parameters['range']) + "\"")
-        time_list.append(time)
         MSD.append(workspace.report('MSD'))
+        #method = OnOffController(
+        #    autonomy_per_time_value[-1],
+        #    "bio",
+        #    parameters['setpoint'],
+        #    parameters['range']
+        #)
+        method = FuzzyController(
+            autonomy_per_time_value[-1],
+            MSD[-1],
+            time
+        )
+        workspace.command(
+            "set dispatch_method \"" + method + "\""
+        )
+        time_list.append(time)
         finished = workspace.report("finished")
         load_time.append(workspace.report("map [x -> [load_time] of x] ( sort shuttles )"))
         free_time.append(workspace.report("map [x -> [free_time] of x] ( sort shuttles )"))
@@ -42,6 +56,7 @@ def run_experiment (parameters):
 
     debut_scenario = workspace.report("debut_scenario")
     fin_scenario = workspace.report("fin_scenario")
+    last_product = workspace.report("last_product_time")
     shuttles = workspace.report("count shuttles")
     # Graph_utils.plot_shuttles(stop_time, free_time, load_time, time_list)
     for index in range(0, int(shuttles)):
@@ -49,8 +64,9 @@ def run_experiment (parameters):
             Graph_utils.transform_shuttle_list(stop_time, time_list, index),
             Graph_utils.transform_shuttle_list(free_time, time_list, index),
             Graph_utils.transform_shuttle_list(load_time, time_list, index), time_list)
-    Graph_utils.simple_plot(autonomy_value, time_list, 'Autonomy', debut_scenario, fin_scenario)
-    Graph_utils.simple_plot(autonomy_per_time_value, time_list, 'Autonomy per time', debut_scenario, fin_scenario)
+    Graph_utils.simple_plot(autonomy_value, time_list, 'Autonomy', debut_scenario, fin_scenario, last_product)
+    Graph_utils.simple_plot(autonomy_per_time_value, time_list, 'Autonomy per time', debut_scenario, fin_scenario, last_product)
+    Graph_utils.simple_plot(MSD, time_list, 'MSD', debut_scenario, fin_scenario, last_product)
     Graph_utils.simple_plot(autonomy_per_time_value, autonomy_value, 'Autonomy per time vs Autonomy')
     print(MSD[-1])
 
